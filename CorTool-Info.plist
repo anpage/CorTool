@@ -31,6 +31,6 @@
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 	<key>SUFeedURL</key>
-	<string>http://frigid.us.to/mccmm/appcast.xml</string>
+	<string>http://frigid.us.to/cortool/appcast.xml</string>
 </dict>
 </plist>
