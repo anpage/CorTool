@@ -52,12 +52,15 @@
         
         [OpenDlg setAllowsMultipleSelection:NO];
         
-        [OpenDlg setTitle: @"Select a Mod (.rte) to Intall"];
+        [OpenDlg setTitle: @"Select a Mod (.rte) to Install"];
         
         [OpenDlg setDirectory: @"~/Downloads/"];
         
         if ([OpenDlg runModal] == NSFileHandlingPanelOKButton)
             SelectedModPath = [OpenDlg filename];
+        else
+            SelectedModPath = nil;
+
         
         if ([[SelectedModPath pathExtension] isEqualToString: @"rte"])
         {
