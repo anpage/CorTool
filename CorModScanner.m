@@ -131,7 +131,7 @@
             /////// End boilerplate.
             
             if (ModIconPath != nil && [FileManager fileExistsAtPath: [Path stringByAppendingString: [@"/" stringByAppendingString: ModIconPath]] isDirectory: NULL])
-                ModIcon = [[NSImage alloc] initByReferencingFile: [Path stringByAppendingString: [@"/" stringByAppendingString: ModIconPath]]];
+                ModIcon = [self makeTransparent: [[NSImage alloc] initByReferencingFile: [Path stringByAppendingString: [@"/" stringByAppendingString: ModIconPath]]]];
             else
                 ModIcon = [[NSImage alloc] initByReferencingFile: [[NSBundle mainBundle] pathForResource: @"noicon" ofType: @"png"]];
                     
@@ -204,6 +204,44 @@
         Value = nil;
              
     return Value;
+    
+}
+
+- (NSImage *)makeTransparent: (NSImage *)Source
+{
+    
+    CGImageRef SourceImage = [Source CGImageForProposedRect: NULL context: [NSGraphicsContext currentContext] hints: nil];
+    
+    NSBitmapImageRep *Bitmap = [[NSBitmapImageRep alloc] initWithCGImage: SourceImage];
+    
+    NSSize ImageSize = [Bitmap size];
+    
+    int Samples = ImageSize.height * [Bitmap bytesPerRow];
+    
+    unsigned char *BitmapData = [Bitmap bitmapData];
+    
+    int SamplesPerPixel = [Bitmap samplesPerPixel];
+    
+    int StartSample = [Bitmap bitmapFormat] & NSAlphaFirstBitmapFormat ? 1 : 0;
+    
+    for (int i = StartSample; i < Samples; i = i + SamplesPerPixel) {
+        
+        if (BitmapData[i] == 255.0 && BitmapData[i + 1] == 0 && BitmapData[i + 2] == 255.0)
+        {
+            
+            BitmapData[i] = 255.0;
+            BitmapData[i + 1] = 255.0;
+            BitmapData[i + 2] = 255.0;
+            
+        }
+        
+    }
+    
+    NSImage *NewImage = [[NSImage alloc] initWithSize: [Bitmap size]];
+    
+    [NewImage addRepresentation: Bitmap];
+    
+    return NewImage;
     
 }
 

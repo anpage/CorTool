@@ -105,6 +105,7 @@
                 [[NSFileManager defaultManager] removeItemAtPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [SelectedModPath lastPathComponent]] error: NULL];
                 
                 [[NSFileManager defaultManager] copyItemAtPath: SelectedModPath toPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [SelectedModPath lastPathComponent]] error: NULL];
+            
             }
             
         }

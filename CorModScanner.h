@@ -23,4 +23,6 @@
 
 - (NSString *)valueForEntry: (NSString *)Entry inIniFile: (NSString *)File;
 
+- (NSImage *)makeTransparent: (NSImage *)Source;
+
 @end
