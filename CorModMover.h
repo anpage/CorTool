@@ -23,6 +23,8 @@
 
 - (void)installMod;
 
+- (void)installModFromPath: (NSString *)Path;
+
 - (void)removeMod: (NSString *)ModFolder modName: (NSString *)ModName;
 
 - (void)moveMod: (NSString *)Mod From: (NSString *)Origin To: (NSString *)Destination;

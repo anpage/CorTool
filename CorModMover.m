@@ -116,6 +116,55 @@
     
 }
 
+- (void)installModFromPath: (NSString *)Path
+{
+    
+    NSString *ResourcePath = [CCApp resourcePath];
+    
+    if ([[Path pathExtension] isEqualToString: @"rte"])
+    {
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [Path lastPathComponent]]])
+        {
+            
+            NSAlert *Alert = [NSAlert alertWithMessageText:@"Are you sure?" 
+                                             defaultButton: @"OK"
+                                           alternateButton: @"Cancel"
+                                               otherButton: nil
+                                 informativeTextWithFormat: @"A mod already exists at \"%@\". Do you want to overwrite it?", [Path lastPathComponent]];
+            
+            if ([Alert runModal] == NSAlertDefaultReturn)
+            {
+                
+                [[NSFileManager defaultManager] removeItemAtPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [Path lastPathComponent]] error: NULL];
+                
+                [[NSFileManager defaultManager] copyItemAtPath: Path toPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [Path lastPathComponent]] error: NULL];
+                
+            }
+            
+        }
+        else
+            [[NSFileManager defaultManager] copyItemAtPath: Path toPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [Path lastPathComponent]] error: NULL];
+        
+    }
+    else
+    {
+        
+        NSAlert *Alert = [[NSAlert alloc] init];
+        
+        [Alert addButtonWithTitle:@"OK"];
+        
+        [Alert setMessageText:@"Not a Valid Mod"];
+        
+        [Alert setInformativeText:@"You must select a valid Cortex Command mod that ends in .rte"];
+        
+        [Alert setAlertStyle:NSWarningAlertStyle];
+        
+        [Alert runModal];
+        
+    }
+    
+}
 
 - (void)removeMod: (NSString *)ModFolder modName: (NSString *)ModName
 {

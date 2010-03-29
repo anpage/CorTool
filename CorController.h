@@ -52,6 +52,12 @@ objectValueForTableColumn:(NSTableColumn *)TableColumn
 - (void)tableView:(NSTableView *)aTableView
 sortDescriptorsDidChange:(NSSortDescriptor *)OldDescriptors;
 
+- (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)op;
+
+- (BOOL)tableView:(NSTableView *)aTableView acceptDrop:(id <NSDraggingInfo>)info
+
+              row:(NSInteger)row dropOperation:(NSTableViewDropOperation)operation;
+
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication;
 
 

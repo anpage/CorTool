@@ -35,6 +35,8 @@
     
     [TableView setSortDescriptors: [NSArray arrayWithObject: NameDescriptor]];
     
+    [TableView registerForDraggedTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]];
+    
 }
 
 - (IBAction)runButton: (id)sender
@@ -252,6 +254,41 @@ sortDescriptorsDidChange:(NSSortDescriptor *)OldDescriptors
     
     [self->Mods sortUsingDescriptors: [aTableView sortDescriptors]];
     [aTableView reloadData];
+    
+}
+
+- (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)op
+{
+    
+    return NSDragOperationEvery;
+    
+}
+
+- (BOOL)tableView:(NSTableView *)aTableView acceptDrop:(id <NSDraggingInfo>)info
+
+              row:(NSInteger)row dropOperation:(NSTableViewDropOperation)operation
+{
+    
+    NSPasteboard* pboard = [info draggingPasteboard];
+    
+    NSArray *files = [pboard propertyListForType:NSFilenamesPboardType];
+    
+    CorDirectory *CorDir = [[CorDirectory alloc] init];
+    
+    NSBundle *CCApp = [CorDir findCCApp];
+    
+    [self setRunButtonImage];
+    
+    CorModMover *ModMover = [[CorModMover alloc] init];
+    
+    [ModMover setCCApp: CCApp];
+    
+    for (NSString* ModPath in files)
+        [ModMover installModFromPath: ModPath];
+    
+    [self scanMods: NULL];
+    
+    return YES;
     
 }
 
