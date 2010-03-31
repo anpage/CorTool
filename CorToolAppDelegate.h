@@ -8,10 +8,19 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface CorToolAppDelegate : NSObject <NSApplicationDelegate> {
-    NSWindow *window;
+#if (MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4)
+@interface CorToolAppDelegate : NSObject
+#else
+@interface CorToolAppDelegate : NSObject <NSApplicationDelegate>
+#endif
+{
+    IBOutlet NSWindow *window;
 }
 
-@property (assign) IBOutlet NSWindow *window;
+//@property (assign) IBOutlet NSWindow *window;
+
+- (NSWindow *)window;
+
+- (void)setWindow:(NSWindow *)aValue;
 
 @end

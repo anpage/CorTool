@@ -37,6 +37,8 @@
     
     [TableView registerForDraggedTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]];
     
+    [NameDescriptor release];
+    
 }
 
 - (IBAction)runButton: (id)sender
@@ -49,6 +51,8 @@
     [self setRunButtonImage];
     
     [[NSWorkspace sharedWorkspace] launchApplication: [CCApp bundlePath]];
+    
+    [CorDir release];
     
 }
 
@@ -71,6 +75,10 @@
     
     [TableView reloadData];
     
+    [CorDir release];
+    
+    [ModScanner release];
+    
 }
 
 - (IBAction)addMod: (id)sender
@@ -89,6 +97,10 @@
     [ModMover installMod];
     
     [self scanMods: NULL];
+    
+    [CorDir release];
+    
+    [ModMover release];
     
 }
 
@@ -113,6 +125,10 @@
     
     [self scanMods: NULL];
     
+    [CorDir release];
+    
+    [ModMover release];
+    
 }
 
 - (IBAction)findApp: (id)sender
@@ -123,6 +139,8 @@
     [CorDir findNewCCAppPathAllowDefault: NO];
     
     [self scanMods: NULL];
+    
+    [CorDir release];
     
 }
 
@@ -149,6 +167,10 @@
         [ModMover enableMod: ModFolder];
     
     [self scanMods: NULL];
+    
+    [CorDir release];
+    
+    [ModMover release];
 }
 
 - (IBAction)toggleAll: (id)sender
@@ -167,12 +189,12 @@
     if ([sender selectedSegment] == 0)
     {
         
-        for (NSDictionary *Mod in Mods)
+        for (int i = 0; i < [Mods count]; i++)
         {
             
-            NSString *ModFolder = [Mod objectForKey: @"modFolder"];
+            NSString *ModFolder = [[Mods objectAtIndex: i] objectForKey: @"modFolder"];
             
-            NSNumber *ModIsEnabled = [Mod objectForKey: @"modIsEnabled"];
+            NSNumber *ModIsEnabled = [[Mods objectAtIndex: i] objectForKey: @"modIsEnabled"];
             
             if ([ModIsEnabled isEqualToNumber: [NSNumber numberWithInt: 0]])
                 [ModMover enableMod: ModFolder]; 
@@ -183,21 +205,25 @@
     else if ([sender selectedSegment] == 1)
     {
         
-        for (NSDictionary *Mod in Mods)
+        for (int i = 0; i < [Mods count]; i++)
         {
             
-            NSString *ModFolder = [Mod objectForKey: @"modFolder"];
+            NSString *ModFolder = [[Mods objectAtIndex: i] objectForKey: @"modFolder"];
             
-            NSNumber *ModIsEnabled = [Mod objectForKey: @"modIsEnabled"];
+            NSNumber *ModIsEnabled = [[Mods objectAtIndex: i] objectForKey: @"modIsEnabled"];
             
             if ([ModIsEnabled isEqualToNumber: [NSNumber numberWithInt: 1]])
-                [ModMover disableMod: ModFolder];
+                [ModMover disableMod: ModFolder]; 
             
         }
         
     }
     
     [self scanMods: NULL];
+    
+    [CorDir release];
+    
+    [ModMover release];
     
 }
 
@@ -217,13 +243,17 @@
     //Find the name of the app without the .app extension.
     NSString *AppName = [[[[CCApp bundlePath] lastPathComponent] componentsSeparatedByString: [@"." stringByAppendingString: [[CCApp bundlePath] pathExtension]]] objectAtIndex: 0];
     
-    [RunButton setLabel: [@"Run " stringByAppendingString: AppName]]; 
+    [RunButton setLabel: [@"Run " stringByAppendingString: AppName]];
+    
+    [CorDir release];
+    
+    [IconImage release];
     
 }
 
 - (id)tableView:(NSTableView *)aTableView
 objectValueForTableColumn:(NSTableColumn *)TableColumn
-row:(NSInteger)RowIndex
+row:(int)RowIndex
 
 {
     
@@ -241,7 +271,7 @@ row:(NSInteger)RowIndex
     
 }
 
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
+- (int)numberOfRowsInTableView:(NSTableView *)aTableView
 {
 
     return [self->Mods count];
@@ -257,7 +287,7 @@ sortDescriptorsDidChange:(NSSortDescriptor *)OldDescriptors
     
 }
 
-- (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)op
+- (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)op
 {
     
     return NSDragOperationEvery;
@@ -266,7 +296,7 @@ sortDescriptorsDidChange:(NSSortDescriptor *)OldDescriptors
 
 - (BOOL)tableView:(NSTableView *)aTableView acceptDrop:(id <NSDraggingInfo>)info
 
-              row:(NSInteger)row dropOperation:(NSTableViewDropOperation)operation
+              row:(int)row dropOperation:(NSTableViewDropOperation)operation
 {
     
     NSPasteboard* pboard = [info draggingPasteboard];
@@ -283,10 +313,14 @@ sortDescriptorsDidChange:(NSSortDescriptor *)OldDescriptors
     
     [ModMover setCCApp: CCApp];
     
-    for (NSString* ModPath in files)
-        [ModMover installModFromPath: ModPath];
+    for (int i = 0; i < [files count]; i++)
+        [ModMover installModFromPath: [files objectAtIndex: i]];
     
     [self scanMods: NULL];
+    
+    [CorDir release];
+    
+    [ModMover release];
     
     return YES;
     

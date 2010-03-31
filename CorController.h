@@ -45,18 +45,18 @@
 
 - (id)tableView:(NSTableView *)aTableView
 objectValueForTableColumn:(NSTableColumn *)TableColumn
-            row:(NSInteger)RowIndex;
+            row:(int)RowIndex;
 
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
+- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
 
 - (void)tableView:(NSTableView *)aTableView
 sortDescriptorsDidChange:(NSSortDescriptor *)OldDescriptors;
 
-- (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)op;
+- (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)op;
 
 - (BOOL)tableView:(NSTableView *)aTableView acceptDrop:(id <NSDraggingInfo>)info
 
-              row:(NSInteger)row dropOperation:(NSTableViewDropOperation)operation;
+              row:(int)row dropOperation:(NSTableViewDropOperation)operation;
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication;
 

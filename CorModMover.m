@@ -11,7 +11,22 @@
 
 @implementation CorModMover
 
-@synthesize CCApp;
+
+- (NSBundle *)CCApp
+{
+    
+    return CCApp;
+    
+}
+
+- (void)setCCApp:(NSBundle *)aValue
+{
+    
+    [CCApp autorelease];
+    
+    CCApp = [aValue retain];
+    
+}
 
 - (void)enableMod: (NSString *)ModFolder
 {
@@ -85,6 +100,8 @@
         
         [Alert runModal];
         
+        [Alert release];
+        
     }
     
     if (IsValidMod == TRUE)
@@ -102,15 +119,15 @@
             if ([Alert runModal] == NSAlertDefaultReturn)
             {
                 
-                [[NSFileManager defaultManager] removeItemAtPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [SelectedModPath lastPathComponent]] error: NULL];
+                [[NSFileManager defaultManager] removeFileAtPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [SelectedModPath lastPathComponent]] handler: nil];
                 
-                [[NSFileManager defaultManager] copyItemAtPath: SelectedModPath toPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [SelectedModPath lastPathComponent]] error: NULL];
+                [[NSFileManager defaultManager] copyPath: SelectedModPath toPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [SelectedModPath lastPathComponent]] handler: nil];
             
             }
             
         }
         else
-            [[NSFileManager defaultManager] copyItemAtPath: SelectedModPath toPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [SelectedModPath lastPathComponent]] error: NULL];
+            [[NSFileManager defaultManager] copyPath: SelectedModPath toPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [SelectedModPath lastPathComponent]] handler: nil];
         
     }
     
@@ -136,15 +153,15 @@
             if ([Alert runModal] == NSAlertDefaultReturn)
             {
                 
-                [[NSFileManager defaultManager] removeItemAtPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [Path lastPathComponent]] error: NULL];
+                [[NSFileManager defaultManager] removeFileAtPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [Path lastPathComponent]] handler: nil];
                 
-                [[NSFileManager defaultManager] copyItemAtPath: Path toPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [Path lastPathComponent]] error: NULL];
+                [[NSFileManager defaultManager] copyPath: Path toPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [Path lastPathComponent]] handler: nil];
                 
             }
             
         }
         else
-            [[NSFileManager defaultManager] copyItemAtPath: Path toPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [Path lastPathComponent]] error: NULL];
+            [[NSFileManager defaultManager] copyPath: Path toPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [Path lastPathComponent]] handler: nil];
         
     }
     else
@@ -162,6 +179,8 @@
         
         [Alert runModal];
         
+        [Alert release];
+        
     }
     
 }
@@ -176,7 +195,7 @@
                           informativeTextWithFormat: @"You are about to permanently delete the mod \"%@\" from your Cortex Command app.", ModName];
     
     if ([Alert runModal] == NSAlertDefaultReturn)
-        [[NSFileManager defaultManager] removeItemAtPath: [[[CCApp resourcePath] stringByAppendingString: @"/"] stringByAppendingString: ModFolder] error: NULL];
+        [[NSFileManager defaultManager] removeFileAtPath: [[[CCApp resourcePath] stringByAppendingString: @"/"] stringByAppendingString: ModFolder] handler: nil];
     
 }
 
@@ -186,10 +205,10 @@
     NSFileManager *FileManager = [NSFileManager defaultManager];
     
     if (![FileManager fileExistsAtPath: Destination])
-        [FileManager createDirectoryAtPath: Destination withIntermediateDirectories: NO attributes: nil error: NULL];
+        [FileManager createDirectoryAtPath: Destination attributes: nil];
 
     
-    [FileManager moveItemAtPath: [Origin stringByAppendingString: Mod] toPath: [Destination stringByAppendingString: Mod] error: NULL];
+    [FileManager movePath: [Origin stringByAppendingString: Mod] toPath: [Destination stringByAppendingString: Mod] handler: nil];
     
 }
 

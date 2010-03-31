@@ -15,7 +15,9 @@
     
 }
 
-@property (readwrite, assign) NSBundle *CCApp;
+- (NSBundle *)CCApp;
+
+- (void)setCCApp: (NSBundle *)aValue;
 
 - (void)enableMod: (NSString *)ModFolder;
 
@@ -28,5 +30,7 @@
 - (void)removeMod: (NSString *)ModFolder modName: (NSString *)ModName;
 
 - (void)moveMod: (NSString *)Mod From: (NSString *)Origin To: (NSString *)Destination;
+
+//- (void)dealloc;
 
 @end

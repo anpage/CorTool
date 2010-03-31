@@ -15,7 +15,11 @@
 
 }
 
-@property (readwrite, assign) NSBundle *CCApp;
+//@property (readwrite, assign) NSBundle *CCApp;
+
+- (void)setCCApp:(NSBundle *) newCCApp;
+
+- (NSBundle *)CCApp;
 
 - (NSArray *)getModArray;
 

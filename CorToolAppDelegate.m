@@ -10,7 +10,19 @@
 
 @implementation CorToolAppDelegate
 
-@synthesize window;
+- (NSWindow *)window
+{
+    
+    return window;
+    
+}
+
+- (void)setWindow:(NSWindow *)aValue
+{
+    
+    window = aValue;
+    
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	// Insert code here to initialize your application 
