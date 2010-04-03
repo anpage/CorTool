@@ -18,17 +18,17 @@
     
     NSString *CCAppPath = nil;
     
-    NSString *Key = [NSString stringWithString:@"CorCCAppPath"];
+    NSString *Key = [[[NSString alloc] initWithString:@"CorCCAppPath"] autorelease];
     
     NSString *DefaultCCAppPath = [[NSUserDefaults standardUserDefaults] stringForKey:Key];
     
-    if (DefaultCCAppPath != nil && [[NSFileManager defaultManager] fileExistsAtPath: DefaultCCAppPath])
+    if (DefaultCCAppPath != nil && [[[[NSFileManager alloc] init] autorelease] fileExistsAtPath: DefaultCCAppPath])
     {
         
-        CCAppPath = [NSString stringWithString:DefaultCCAppPath];
+        CCAppPath = [[[NSString alloc] initWithString:DefaultCCAppPath] autorelease];
         
     }
-    else
+    else 
     {
         
         CCAppPath = [self findNewCCAppPathAllowDefault: YES];
@@ -38,7 +38,7 @@
         
     }
     
-    CCApp = [NSBundle bundleWithPath:CCAppPath];
+    CCApp = [[[NSBundle alloc] initWithPath:CCAppPath] autorelease];
     
     return CCApp;
     
@@ -48,15 +48,16 @@
 {
     NSString *CCAppPath = nil;
     
-    NSString *Key = [NSString stringWithString:@"CorCCAppPath"];
+    NSString *Key = [[[NSString alloc] initWithString:@"CorCCAppPath"] autorelease];
     
-    NSArray *DefaultApps = [NSArray arrayWithObjects: @"/Applications/Cortex Command b23.app", @"/Applications/Cortex Command.app", nil];
+    NSArray *DefaultApps = [[[NSArray alloc] initWithObjects: @"/Applications/Cortex Command b23.app", @"/Applications/Cortex Command.app", nil] autorelease];
     
-    for (int i = 0; i < [DefaultApps count]; i++)
+	for (int i = 0; i < [DefaultApps count]; i++)
     {
-        
-        if (AllowDefault && [[NSFileManager defaultManager] fileExistsAtPath: [DefaultApps objectAtIndex: i]])
-            CCAppPath = [DefaultApps objectAtIndex: i];
+        NSString *DefaultPath = [DefaultApps objectAtIndex: i];
+		
+        if (AllowDefault && [[[[NSFileManager alloc] init] autorelease] fileExistsAtPath: DefaultPath])
+            CCAppPath = DefaultPath;
         
     }
     
@@ -93,7 +94,7 @@
             
             NSLog(@"%@", CCAppPath);
             
-            if (CCAppPath == nil || [[[NSBundle bundleWithPath:CCAppPath] bundleIdentifier] isEqualToString: @"com.datarealms.cortexcommand"])
+            if (CCAppPath == nil || [[[[[NSBundle alloc] initWithPath:CCAppPath] autorelease] bundleIdentifier] isEqualToString: @"com.datarealms.cortexcommand"])
                 break;
             
             NSAlert *Alert = [[NSAlert alloc] init];
@@ -107,8 +108,8 @@
             [Alert setAlertStyle:NSWarningAlertStyle];
             
             [Alert runModal];
-            
-            [Alert release];
+			
+			[Alert release];
             
         }
         

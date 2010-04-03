@@ -31,6 +31,4 @@
 
 - (void)moveMod: (NSString *)Mod From: (NSString *)Origin To: (NSString *)Destination;
 
-//- (void)dealloc;
-
 @end

@@ -26,7 +26,7 @@
 
 - (void)awakeFromNib
 { 
-    
+	
     [self setRunButtonImage];
     
     [self scanMods: NULL];
@@ -36,36 +36,39 @@
     [TableView setSortDescriptors: [NSArray arrayWithObject: NameDescriptor]];
     
     [TableView registerForDraggedTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]];
-    
-    [NameDescriptor release];
+	
+	[NameDescriptor release];
     
 }
 
 - (IBAction)runButton: (id)sender
 {
-    
-    CorDirectory *CorDir = [[CorDirectory alloc] init];
+    NSAutoreleasePool *Pool = [[NSAutoreleasePool alloc] init];
+	
+    CorDirectory *CorDir = [[[CorDirectory alloc] init] autorelease];
     
     NSBundle *CCApp = [CorDir findCCApp];
     
     [self setRunButtonImage];
     
     [[NSWorkspace sharedWorkspace] launchApplication: [CCApp bundlePath]];
-    
-    [CorDir release];
+	
+	[Pool release];
     
 }
 
 - (IBAction)scanMods: (id)sender
 {
- 
-    CorDirectory *CorDir = [[CorDirectory alloc] init];
+	
+	NSAutoreleasePool *Pool = [[NSAutoreleasePool alloc] init];
+	
+    CorDirectory *CorDir = [[[CorDirectory alloc] init] autorelease];
     
     NSBundle *CCApp = [CorDir findCCApp];
     
     [self setRunButtonImage];
     
-    CorModScanner *ModScanner = [[CorModScanner alloc] init];
+    CorModScanner *ModScanner = [[[CorModScanner alloc] init] autorelease];
     
     [ModScanner setCCApp: CCApp];
     
@@ -75,22 +78,22 @@
     
     [TableView reloadData];
     
-    [CorDir release];
-    
-    [ModScanner release];
-    
+	[Pool release];
+	
 }
 
 - (IBAction)addMod: (id)sender
 {
     
-    CorDirectory *CorDir = [[CorDirectory alloc] init];
+	NSAutoreleasePool *Pool = [[NSAutoreleasePool alloc] init];
+	
+    CorDirectory *CorDir = [[[CorDirectory alloc] init] autorelease];
     
     NSBundle *CCApp = [CorDir findCCApp];
     
     [self setRunButtonImage];
     
-    CorModMover *ModMover = [[CorModMover alloc] init];
+    CorModMover *ModMover = [[[CorModMover alloc] init] autorelease];
     
     [ModMover setCCApp: CCApp];
     
@@ -98,22 +101,22 @@
     
     [self scanMods: NULL];
     
-    [CorDir release];
-    
-    [ModMover release];
-    
+	[Pool release];
+	
 }
 
 - (IBAction)removeMod: (id)sender
 {
     
-    CorDirectory *CorDir = [[CorDirectory alloc] init];
+	NSAutoreleasePool *Pool = [[NSAutoreleasePool alloc] init];
+	
+    CorDirectory *CorDir = [[[CorDirectory alloc] init] autorelease];
     
     NSBundle *CCApp = [CorDir findCCApp];
     
     [self setRunButtonImage];
     
-    CorModMover *ModMover = [[CorModMover alloc] init];
+    CorModMover *ModMover = [[[CorModMover alloc] init] autorelease];
     
     [ModMover setCCApp: CCApp];
     
@@ -124,36 +127,38 @@
     [ModMover removeMod: ModFolder modName: ModName];
     
     [self scanMods: NULL];
-    
-    [CorDir release];
-    
-    [ModMover release];
+	
+	[Pool release];
     
 }
 
 - (IBAction)findApp: (id)sender
 {
     
-    CorDirectory *CorDir = [[CorDirectory alloc] init];
+	NSAutoreleasePool *Pool = [[NSAutoreleasePool alloc] init];
+	
+    CorDirectory *CorDir = [[[CorDirectory alloc] init] autorelease];
     
     [CorDir findNewCCAppPathAllowDefault: NO];
     
     [self scanMods: NULL];
-    
-    [CorDir release];
+	
+	[Pool release];
     
 }
 
 - (IBAction)checkButton: (id)sender
 {
     
-    CorDirectory *CorDir = [[CorDirectory alloc] init];
+	NSAutoreleasePool *Pool = [[NSAutoreleasePool alloc] init];
+	
+    CorDirectory *CorDir = [[[CorDirectory alloc] init] autorelease];
     
     NSBundle *CCApp = [CorDir findCCApp];
     
     [self setRunButtonImage];
     
-    CorModMover *ModMover = [[CorModMover alloc] init];
+    CorModMover *ModMover = [[[CorModMover alloc] init] autorelease];
     
     [ModMover setCCApp: CCApp];
     
@@ -167,107 +172,103 @@
         [ModMover enableMod: ModFolder];
     
     [self scanMods: NULL];
-    
-    [CorDir release];
-    
-    [ModMover release];
+	
+	[Pool release];
 }
 
 - (IBAction)toggleAll: (id)sender
 {
-    
-    CorDirectory *CorDir = [[CorDirectory alloc] init];
+    NSAutoreleasePool *Pool = [[NSAutoreleasePool alloc] init];
+	
+    CorDirectory *CorDir = [[[CorDirectory alloc] init] autorelease];
     
     NSBundle *CCApp = [CorDir findCCApp];
     
     [self setRunButtonImage];
     
-    CorModMover *ModMover = [[CorModMover alloc] init];
+    CorModMover *ModMover = [[[CorModMover alloc] init] autorelease];
     
     [ModMover setCCApp: CCApp];
     
-    if ([sender selectedSegment] == 0)
-    {
-        
-        for (int i = 0; i < [Mods count]; i++)
-        {
-            
-            NSString *ModFolder = [[Mods objectAtIndex: i] objectForKey: @"modFolder"];
-            
-            NSNumber *ModIsEnabled = [[Mods objectAtIndex: i] objectForKey: @"modIsEnabled"];
-            
-            if ([ModIsEnabled isEqualToNumber: [NSNumber numberWithInt: 0]])
-                [ModMover enableMod: ModFolder]; 
-            
-        }
-        
-    }
-    else if ([sender selectedSegment] == 1)
-    {
-        
-        for (int i = 0; i < [Mods count]; i++)
-        {
-            
-            NSString *ModFolder = [[Mods objectAtIndex: i] objectForKey: @"modFolder"];
-            
-            NSNumber *ModIsEnabled = [[Mods objectAtIndex: i] objectForKey: @"modIsEnabled"];
-            
-            if ([ModIsEnabled isEqualToNumber: [NSNumber numberWithInt: 1]])
-                [ModMover disableMod: ModFolder]; 
-            
-        }
-        
-    }
+	for (int i = 0; i < [Mods count]; i++)
+	{
+		
+		NSDictionary *Mod = [Mods objectAtIndex: i];
+		
+		NSString *ModFolder = [Mod objectForKey: @"modFolder"];
+		
+		NSNumber *ModIsEnabled = [Mod objectForKey: @"modIsEnabled"];
+		
+		if ([sender selectedSegment] == 0)
+		{
+			
+			if ([ModIsEnabled isEqualToNumber: [NSNumber numberWithInt: 0]])
+			{
+				
+				[ModMover enableMod: ModFolder];
+				
+			}
+			
+		}
+		else if ([sender selectedSegment] == 1)
+		{
+			
+			if ([ModIsEnabled isEqualToNumber: [NSNumber numberWithInt: 1]])
+			{
+				
+				[ModMover disableMod: ModFolder];
+				
+			}
+			
+		}
+		
+	}
     
     [self scanMods: NULL];
-    
-    [CorDir release];
-    
-    [ModMover release];
+	
+	[Pool release];
     
 }
 
 - (void)setRunButtonImage
 {
     
-    CorDirectory *CorDir = [[CorDirectory alloc] init];
+	NSAutoreleasePool *Pool = [[NSAutoreleasePool alloc] init];
+	
+    CorDirectory *CorDir = [[[CorDirectory alloc] init] autorelease];
     
     NSBundle *CCApp = [CorDir findCCApp];
     
     NSString *IconFileName = [[CCApp infoDictionary] objectForKey: @"CFBundleIconFile"];
     
-    NSImage *IconImage = [[NSImage alloc] initWithContentsOfFile: [CCApp pathForResource: IconFileName ofType: nil]];
+    NSImage *IconImage = [[[NSImage alloc] initWithContentsOfFile: [CCApp pathForResource: IconFileName ofType: nil]] autorelease];
     
     [RunButton setImage: IconImage];
     
     //Find the name of the app without the .app extension.
     NSString *AppName = [[[[CCApp bundlePath] lastPathComponent] componentsSeparatedByString: [@"." stringByAppendingString: [[CCApp bundlePath] pathExtension]]] objectAtIndex: 0];
     
-    [RunButton setLabel: [@"Run " stringByAppendingString: AppName]];
+    [RunButton setLabel: [@"Run " stringByAppendingString: AppName]]; 
     
-    [CorDir release];
-    
-    [IconImage release];
-    
+	[Pool release];
 }
 
 - (id)tableView:(NSTableView *)aTableView
 objectValueForTableColumn:(NSTableColumn *)TableColumn
 row:(int)RowIndex
-
 {
     
-    id TheRecord, TheValue;
-    
-    
+    id Record;
+	
+	id Value;
     
     NSParameterAssert(RowIndex >= 0 && RowIndex < [self->Mods count]);
     
-    TheRecord = [self->Mods objectAtIndex:RowIndex];
+    Record = [self->Mods objectAtIndex:RowIndex];
     
-    TheValue = [TheRecord objectForKey:[TableColumn identifier]];
+    Value = [Record objectForKey:[TableColumn identifier]];
     
-    return TheValue;
+    return Value;
     
 }
 
@@ -283,6 +284,7 @@ sortDescriptorsDidChange:(NSSortDescriptor *)OldDescriptors
 {
     
     [self->Mods sortUsingDescriptors: [aTableView sortDescriptors]];
+	
     [aTableView reloadData];
     
 }
@@ -299,28 +301,34 @@ sortDescriptorsDidChange:(NSSortDescriptor *)OldDescriptors
               row:(int)row dropOperation:(NSTableViewDropOperation)operation
 {
     
-    NSPasteboard* pboard = [info draggingPasteboard];
+	NSAutoreleasePool *Pool = [[NSAutoreleasePool alloc] init];
+	
+    NSPasteboard* PasteBoard = [info draggingPasteboard];
     
-    NSArray *files = [pboard propertyListForType:NSFilenamesPboardType];
+    NSArray *Files = [PasteBoard propertyListForType:NSFilenamesPboardType];
     
-    CorDirectory *CorDir = [[CorDirectory alloc] init];
+    CorDirectory *CorDir = [[[CorDirectory alloc] init] autorelease];
     
     NSBundle *CCApp = [CorDir findCCApp];
     
     [self setRunButtonImage];
     
-    CorModMover *ModMover = [[CorModMover alloc] init];
+    CorModMover *ModMover = [[[CorModMover alloc] init] autorelease];
     
     [ModMover setCCApp: CCApp];
-    
-    for (int i = 0; i < [files count]; i++)
-        [ModMover installModFromPath: [files objectAtIndex: i]];
+		
+	for (int i = 0; i < [Files count]; i++)
+	{
+		
+		NSString *ModPath = [Files objectAtIndex: i];
+		
+        [ModMover installModFromPath: ModPath];
+		
+	}
     
     [self scanMods: NULL];
-    
-    [CorDir release];
-    
-    [ModMover release];
+	
+	[Pool release];
     
     return YES;
     

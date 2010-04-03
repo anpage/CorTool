@@ -11,7 +11,6 @@
 
 @implementation CorModScanner
 
-
 - (void)setCCApp:(NSBundle *) newCCApp
 {
     
@@ -28,14 +27,19 @@
 
 - (NSArray *)getModArray
 {
-    NSFileManager *FileManager = [NSFileManager defaultManager];
+	
+    NSFileManager *FileManager = [[NSFileManager defaultManager] autorelease];
     
     if (![FileManager fileExistsAtPath: [[self.CCApp resourcePath] stringByAppendingString: @"/Disabled_Mods/"]])
         [FileManager createDirectoryAtPath: [[self.CCApp resourcePath] stringByAppendingString: @"/Disabled_Mods/"] attributes: nil];
     
+	//NSAutoreleasePool *Pool = [[NSAutoreleasePool alloc] init];
+	
     NSArray *EnabledMods = [self scanInFolder: [[self.CCApp resourcePath] stringByAppendingString: @"/"] withStatus: YES];
     
     NSArray *DisabledMods = [self scanInFolder: [[self.CCApp resourcePath] stringByAppendingString: @"/Disabled_Mods/"] withStatus: NO];
+	
+	//[Pool release];
     
     NSArray *Mods = [EnabledMods arrayByAddingObjectsFromArray: DisabledMods];
     
@@ -46,54 +50,59 @@
 - (NSArray *)scanInFolder: (NSString *)Path withStatus: (BOOL)Enabled
 {
     
-    NSArray *BuiltInMods = [[NSArray alloc] initWithObjects: @"Base.rte", @"Browncoats.rte", @"Coalition.rte", @"Dummy.rte", @"Missions.rte", @"Ronin.rte",
+	
+    NSArray *BuiltInMods = [NSArray arrayWithObjects: @"Base.rte", @"Browncoats.rte", @"Coalition.rte", @"Dummy.rte", @"Missions.rte", @"Ronin.rte",
                            @"Tutorial.rte", @"Undead.rte", @"Whitebots.rte", @"Wildlife.rte", nil];
     
-    NSMutableArray *Mods = [[NSMutableArray alloc] init];
+    NSMutableArray *Mods = [[[NSMutableArray alloc] init] autorelease];
     
-    NSFileManager *FileManager = [NSFileManager defaultManager];
+    NSFileManager *FileManager = [[NSFileManager defaultManager] autorelease];
     
     if (![FileManager fileExistsAtPath: Path isDirectory: NULL])
         [FileManager createDirectoryAtPath: Path attributes: nil];
     
     NSArray *ModsAtPath = [FileManager directoryContentsAtPath: Path];
     
-    for (int i = 0; i < [ModsAtPath count]; i++)
+	for (int i = 0; i < [ModsAtPath count]; i++)
     {
         
+		NSString *ModFolder = [ModsAtPath objectAtIndex: i];
+		
         BOOL IsBuiltIn = FALSE;
         
-        for (int v = 0; v < [BuiltInMods count]; v++)
+		for (int v = 0; v < [BuiltInMods count]; v++)
         {
             
-            if ([[ModsAtPath objectAtIndex: i] isEqualToString: [BuiltInMods objectAtIndex: v]])
+			NSString *BuiltInMod = [BuiltInMods objectAtIndex: v];
+			
+            if ([ModFolder isEqualToString: BuiltInMod])
                 IsBuiltIn = TRUE;
             
         }
         
-        if ([[[ModsAtPath objectAtIndex: i] pathExtension] isEqualToString: @"rte"] && !IsBuiltIn)
+        if ([[ModFolder pathExtension] isEqualToString: @"rte"] && !IsBuiltIn)
         {
             
-            NSString *ModName;
+            NSString *ModName = [[[NSString alloc] init] autorelease];
             
             NSImage *ModIcon = nil;
             
-            ModName = [self valueForEntry: @"ModuleName" inIniFile: [Path stringByAppendingString: [[ModsAtPath objectAtIndex: i] stringByAppendingString: @"/index.ini"]]];
+            ModName = [self valueForEntry: @"ModuleName" inIniFile: [Path stringByAppendingString: [ModFolder stringByAppendingString: @"/index.ini"]]];
             
             if (ModName == nil)
-                ModName = [[[ModsAtPath objectAtIndex: i] componentsSeparatedByString: [@"." stringByAppendingString: [[ModsAtPath objectAtIndex: i] pathExtension]]] objectAtIndex: 0];
+                ModName = [[ModFolder componentsSeparatedByString: [@"." stringByAppendingString: [ModFolder pathExtension]]] objectAtIndex: 0];
             
             /////// Boilerplate code!
             
-            NSString *ModIconPath;
+            NSString *ModIconPath = [[[NSString alloc] init] autorelease];
             
-            NSString *FileContents = [NSString stringWithContentsOfFile: [Path stringByAppendingString: [[ModsAtPath objectAtIndex: i] stringByAppendingString: @"/index.ini"]] usedEncoding: nil error: NULL];
+            NSString *FileContents = [NSString stringWithContentsOfFile: [Path stringByAppendingString: [ModFolder stringByAppendingString: @"/index.ini"]] usedEncoding: nil error: NULL];
             
             unsigned Length = [FileContents length];
             
             unsigned LineStart = 0, LineEnd = 0, ContentsEnd = 0;
             
-            NSMutableArray *FileLines = [[NSMutableArray alloc] init];
+            NSMutableArray *FileLines = [[[NSMutableArray alloc] init] autorelease];
             
             NSRange CurrentRange;
             
@@ -114,10 +123,13 @@
             
             BOOL IconLineFound = NO;
             
-            for (int k = 0; k < [FileLines count]; k++)
+            //for (NSString *Line in FileLines)
+			for (int i = 0; i < [FileLines count]; i++)
             {
+				
+				NSString *Line = [FileLines objectAtIndex: i];
                                 
-                NSString *FilteredLine = [[[FileLines objectAtIndex: k] componentsSeparatedByString: @"//"] objectAtIndex:0];
+                NSString *FilteredLine = [[Line componentsSeparatedByString: @"//"] objectAtIndex:0];
                 
                 if (![FilteredLine isEqualToString: @""] && IconLineFound)
                 {
@@ -141,22 +153,14 @@
             if (!HasEntry)
                 ModIconPath = nil;
             
-            [FileLines release];
-            
             /////// End boilerplate.
             
             if (ModIconPath != nil && [FileManager fileExistsAtPath: [Path stringByAppendingString: [@"/" stringByAppendingString: ModIconPath]] isDirectory: NULL])
-                ModIcon = [self makeTransparent: [[NSImage alloc] initByReferencingFile: [Path stringByAppendingString: [@"/" stringByAppendingString: ModIconPath]]]];
+                ModIcon = [self makeTransparent: [[[NSImage alloc] initByReferencingFile: [Path stringByAppendingString: [@"/" stringByAppendingString: ModIconPath]]] autorelease]];
             else
-            {
-                
-                ModIcon = [[NSImage alloc] initByReferencingFile: [[NSBundle mainBundle] pathForResource: @"noicon" ofType: @"png"]];
-                
-                [ModIcon autorelease];
-                
-            }
+                ModIcon = [[[NSImage alloc] initByReferencingFile: [[NSBundle mainBundle] pathForResource: @"noicon" ofType: @"png"]] autorelease];
                     
-            NSMutableDictionary *ModEntry = [[NSMutableDictionary alloc] init];
+            NSMutableDictionary *ModEntry = [[[NSMutableDictionary alloc] init] autorelease];
             
             [ModEntry setObject: [NSNumber numberWithBool: Enabled] forKey: @"modIsEnabled"];
             
@@ -164,22 +168,14 @@
             
             [ModEntry setObject: ModName forKey: @"modName"];
             
-            [ModEntry setObject: [ModsAtPath objectAtIndex: i] forKey: @"modFolder"];
+            [ModEntry setObject: ModFolder forKey: @"modFolder"];
             
             [Mods addObject: ModEntry];
-            
-            [ModEntry release];
-            
-            [ModIcon release];
             
         }
         
     }
-    
-    [BuiltInMods release];
-    
-    [Mods autorelease];
-    
+	
     return Mods;
     
 }
@@ -187,7 +183,7 @@
 - (NSString *)valueForEntry: (NSString *)Entry inIniFile: (NSString *)File
 {
     
-    NSString *Value;
+    NSString *Value = [[[NSString alloc] init] autorelease];
     
     NSString *FileContents = [NSString stringWithContentsOfFile: File usedEncoding: nil error: NULL];
     
@@ -195,7 +191,7 @@
     
     unsigned LineStart = 0, LineEnd = 0, ContentsEnd = 0;
     
-    NSMutableArray *FileLines = [[NSMutableArray alloc] init];
+    NSMutableArray *FileLines = [[[NSMutableArray alloc] init] autorelease];
     
     NSRange CurrentRange;
     
@@ -213,10 +209,12 @@
     
     BOOL HasEntry = NO;
     
-    for (int i = 0; i < [FileLines count]; i++)
-    {
-        
-        NSString *FilteredLine = [[[FileLines objectAtIndex: i] componentsSeparatedByString: @"//"] objectAtIndex:0];
+	for (int i = 0; i < [FileLines count]; i++)
+	{
+		
+		NSString *Line = [FileLines objectAtIndex: i];
+		
+        NSString *FilteredLine = [[Line componentsSeparatedByString: @"//"] objectAtIndex:0];
             
         if ([[[[FilteredLine componentsSeparatedByString: @"="] objectAtIndex:0] stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceCharacterSet]] isEqualToString: Entry])
         {
@@ -231,8 +229,6 @@
     
     if (!HasEntry)
         Value = nil;
-    
-    [FileLines release];
              
     return Value;
     
@@ -240,9 +236,9 @@
 
 - (NSImage *)makeTransparent: (NSImage *)Source
 {
-    
-    NSBitmapImageRep *Bitmap = [[NSBitmapImageRep alloc] initWithData: [Source TIFFRepresentation]];
-    
+        
+    NSBitmapImageRep *Bitmap = [[[NSBitmapImageRep alloc] initWithData: [Source TIFFRepresentation]] autorelease];
+	
     NSSize ImageSize = [Bitmap size];
     
     int Samples = ImageSize.height * [Bitmap bytesPerRow];
@@ -252,29 +248,24 @@
     int SamplesPerPixel = [Bitmap samplesPerPixel];
     
     int StartSample = [Bitmap bitmapFormat] & NSAlphaFirstBitmapFormat ? 1 : 0;
+	
     
     for (int i = StartSample; i < Samples; i = i + SamplesPerPixel) {
         
         if (BitmapData[i] == 255.0 && BitmapData[i + 1] == 0 && BitmapData[i + 2] == 255.0)
         {
             
-            BitmapData[i + 1] = 255.0;
+			BitmapData[i + 1] = 255.0;
             
         }
         
     }
     
-    NSImage *NewImage = [[NSImage alloc] initWithSize: [Bitmap size]];
+    NSImage *NewImage = [[[NSImage alloc] initWithSize: [Bitmap size]] autorelease];
     
     [NewImage addRepresentation: Bitmap];
     
-    [NewImage autorelease];
-    
-    [Bitmap release];
-    
-    [Source release];
-    
-    return [NewImage copy];
+    return NewImage;
     
 }
 

@@ -99,8 +99,8 @@
         [Alert setAlertStyle:NSWarningAlertStyle];
         
         [Alert runModal];
-        
-        [Alert release];
+		
+		[Alert release];
         
     }
     
@@ -122,7 +122,7 @@
                 [[NSFileManager defaultManager] removeFileAtPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [SelectedModPath lastPathComponent]] handler: nil];
                 
                 [[NSFileManager defaultManager] copyPath: SelectedModPath toPath: [[ResourcePath stringByAppendingString: @"/"] stringByAppendingString: [SelectedModPath lastPathComponent]] handler: nil];
-            
+				
             }
             
         }
@@ -178,8 +178,8 @@
         [Alert setAlertStyle:NSWarningAlertStyle];
         
         [Alert runModal];
-        
-        [Alert release];
+		
+		[Alert release];
         
     }
     
@@ -202,7 +202,7 @@
 - (void)moveMod: (NSString *)Mod From: (NSString *)Origin To: (NSString *)Destination
 {
     
-    NSFileManager *FileManager = [NSFileManager defaultManager];
+    NSFileManager *FileManager = [[NSFileManager defaultManager] autorelease];
     
     if (![FileManager fileExistsAtPath: Destination])
         [FileManager createDirectoryAtPath: Destination attributes: nil];
