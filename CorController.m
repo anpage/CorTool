@@ -51,10 +51,24 @@
 	{
 		[[NSUserDefaults standardUserDefaults] setObject: @"True" forKey: @"BundlePackage"];
 	}
-
-	PrefController = [[NSWindowController alloc] initWithWindowNibName: @"Preferences"];
 	
 	[NameDescriptor release];
+    
+}
+
+- (NSWindow *)prefsWindow
+{
+    
+    return PrefsWindow;
+    
+}
+
+- (void)setPrefsWindow:(NSWindow *)aValue
+{
+    
+    [PrefsWindow autorelease];
+    
+    PrefsWindow = [aValue retain];
     
 }
 
@@ -249,15 +263,17 @@
 
 - (IBAction)openPrefWindow: (id)sender
 {
-	
-	if (![PrefController isWindowLoaded])
-	{
-	
-		[PrefController loadWindow];
-	
-		[PrefController showWindow: nil];
-		
-	}
+    
+    if (PrefsWindow == nil)
+    {
+        if (![NSBundle loadNibNamed:@"Preferences" owner:self])
+        {
+            NSLog(@"Warning! Could not load myNib file.\n");
+        }
+        [PrefsWindow release];
+    }
+    
+    [PrefsWindow makeKeyAndOrderFront:self];
 
 }
 

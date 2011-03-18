@@ -20,16 +20,20 @@
     IBOutlet NSToolbarItem *RunButton;
 	
 	IBOutlet NSWindow *MainWindow;
+    
+    IBOutlet NSWindow *PrefsWindow;
 	
 	IBOutlet NSButton *BundlePackageCheck;
     
     NSMutableArray *Mods;
-	
-	NSWindowController *PrefController;
 
 }
 
 - (id)init;
+
+- (NSWindow *)prefsWindow;
+
+- (void)setPrefsWindow:(NSWindow *)aValue;
 
 - (void)awakeFromNib;
 
