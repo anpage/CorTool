@@ -268,7 +268,7 @@
     {
         if (![NSBundle loadNibNamed:@"Preferences" owner:self])
         {
-            NSLog(@"Warning! Could not load myNib file.\n");
+            NSLog(@"Warning! Could not load Preferences nib file.\n");
         }
         [PrefsWindow release];
     }
@@ -308,8 +308,6 @@
 		[MutablePlist removeObjectForKey: @"CFBundleDocumentTypes"];
 		
 	}
-	
-	NSLog(@"%@", MutablePlist);
 	
 	[MutablePlist writeToFile: InfoPath atomically: YES];
 	
