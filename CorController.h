@@ -18,8 +18,14 @@
     IBOutlet NSTableView *TableView;
     
     IBOutlet NSToolbarItem *RunButton;
+	
+	IBOutlet NSWindow *MainWindow;
+	
+	IBOutlet NSButton *BundlePackageCheck;
     
     NSMutableArray *Mods;
+	
+	NSWindowController *PrefController;
 
 }
 
@@ -40,6 +46,10 @@
 - (IBAction)checkButton: (id)sender;
 
 - (IBAction)toggleAll: (id)sender;
+
+- (IBAction)openPrefWindow: (id)sender;
+
+- (IBAction)toggleBundlePackage: (id)sender;
 
 - (void)setRunButtonImage;
 

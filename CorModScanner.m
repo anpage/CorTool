@@ -32,14 +32,10 @@
     
     if (![FileManager fileExistsAtPath: [[self.CCApp resourcePath] stringByAppendingString: @"/Disabled_Mods/"]])
         [FileManager createDirectoryAtPath: [[self.CCApp resourcePath] stringByAppendingString: @"/Disabled_Mods/"] attributes: nil];
-    
-	//NSAutoreleasePool *Pool = [[NSAutoreleasePool alloc] init];
-	
+    	
     NSArray *EnabledMods = [self scanInFolder: [[self.CCApp resourcePath] stringByAppendingString: @"/"] withStatus: YES];
     
     NSArray *DisabledMods = [self scanInFolder: [[self.CCApp resourcePath] stringByAppendingString: @"/Disabled_Mods/"] withStatus: NO];
-	
-	//[Pool release];
     
     NSArray *Mods = [EnabledMods arrayByAddingObjectsFromArray: DisabledMods];
     
