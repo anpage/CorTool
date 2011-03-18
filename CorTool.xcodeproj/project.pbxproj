@@ -14,13 +14,15 @@
 		821530EA1145D392002A43FC /* Remove.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 821530E91145D392002A43FC /* Remove.tiff */; };
 		821530EC1145D397002A43FC /* reload.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 821530EB1145D397002A43FC /* reload.tiff */; };
 		821530EE1145D39F002A43FC /* Spotlight.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 821530ED1145D39F002A43FC /* Spotlight.tiff */; };
-		821530F01145D40E002A43FC /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 821530EF1145D40E002A43FC /* Sparkle.framework */; };
+		821530F01145D40E002A43FC /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 821530EF1145D40E002A43FC /* Sparkle.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		821530FB1145D426002A43FC /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 821530EF1145D40E002A43FC /* Sparkle.framework */; };
 		821530FE1145D4F0002A43FC /* noicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 821530FD1145D4F0002A43FC /* noicon.png */; };
 		821531151145D822002A43FC /* CorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 821531141145D822002A43FC /* CorController.m */; };
 		821531211145D8FB002A43FC /* CorDirectory.m in Sources */ = {isa = PBXBuildFile; fileRef = 821531201145D8FB002A43FC /* CorDirectory.m */; };
 		8215319E1145F932002A43FC /* CorModScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 8215319D1145F932002A43FC /* CorModScanner.m */; };
 		821531A31145F93C002A43FC /* CorModMover.m in Sources */ = {isa = PBXBuildFile; fileRef = 821531A21145F93C002A43FC /* CorModMover.m */; };
+		8268D98211DE45C5008B0BD7 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8268D98111DE45C5008B0BD7 /* Preferences.xib */; };
+		8268DA9511DE9914008B0BD7 /* RTEMOD.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8268DA9411DE9914008B0BD7 /* RTEMOD.icns */; };
 		828F994B114ADB2400E86B66 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 828F994A114ADB2400E86B66 /* dsa_pub.pem */; };
 		82A4FE9C1161B0A200C92475 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82A4FE9B1161B0A200C92475 /* Cocoa.framework */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -62,6 +64,8 @@
 		8215319D1145F932002A43FC /* CorModScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CorModScanner.m; sourceTree = "<group>"; };
 		821531A11145F93C002A43FC /* CorModMover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CorModMover.h; sourceTree = "<group>"; };
 		821531A21145F93C002A43FC /* CorModMover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CorModMover.m; sourceTree = "<group>"; };
+		8268D98111DE45C5008B0BD7 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
+		8268DA9411DE9914008B0BD7 /* RTEMOD.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = RTEMOD.icns; sourceTree = "<group>"; };
 		828F994A114ADB2400E86B66 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		82A4FE9B1161B0A200C92475 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		82A4FEA31161B0B500C92475 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -76,8 +80,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				821530F01145D40E002A43FC /* Sparkle.framework in Frameworks */,
 				82A4FE9C1161B0A200C92475 /* Cocoa.framework in Frameworks */,
+				821530F01145D40E002A43FC /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,6 +156,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8268DA9411DE9914008B0BD7 /* RTEMOD.icns */,
 				821530FD1145D4F0002A43FC /* noicon.png */,
 				828F994A114ADB2400E86B66 /* dsa_pub.pem */,
 				821530ED1145D39F002A43FC /* Spotlight.tiff */,
@@ -162,6 +167,7 @@
 				8D1107310486CEB800E47090 /* CorTool-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
+				8268D98111DE45C5008B0BD7 /* Preferences.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -235,6 +241,8 @@
 				821530EE1145D39F002A43FC /* Spotlight.tiff in Resources */,
 				821530FE1145D4F0002A43FC /* noicon.png in Resources */,
 				828F994B114ADB2400E86B66 /* dsa_pub.pem in Resources */,
+				8268D98211DE45C5008B0BD7 /* Preferences.xib in Resources */,
+				8268DA9511DE9914008B0BD7 /* RTEMOD.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

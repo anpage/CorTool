@@ -37,6 +37,23 @@
     
     [TableView registerForDraggedTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]];
 	
+	NSString *BundlePackage = [[NSUserDefaults standardUserDefaults] stringForKey: @"BundlePackage"];
+	
+	if ([BundlePackage isEqualToString: @"True"])
+	{
+		[BundlePackageCheck setState: NSOnState];
+	}
+	else if ([BundlePackage isEqualToString: @"False"])
+	{
+		[BundlePackageCheck	setState: NSOffState];
+	}
+	else
+	{
+		[[NSUserDefaults standardUserDefaults] setObject: @"True" forKey: @"BundlePackage"];
+	}
+
+	PrefController = [[NSWindowController alloc] initWithWindowNibName: @"Preferences"];
+	
 	[NameDescriptor release];
     
 }
@@ -230,6 +247,60 @@
     
 }
 
+- (IBAction)openPrefWindow: (id)sender
+{
+	
+	if (![PrefController isWindowLoaded])
+	{
+	
+		[PrefController loadWindow];
+	
+		[PrefController showWindow: nil];
+		
+	}
+
+}
+
+- (IBAction)toggleBundlePackage: (id)sender;
+{
+	
+	NSString *InfoPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingString: @"/Contents/Info.plist"];
+	
+	NSDictionary *InfoPlist = [NSDictionary dictionaryWithContentsOfFile: InfoPath];
+	
+	NSMutableDictionary *MutablePlist = [[NSMutableDictionary alloc] init];
+	
+	[MutablePlist addEntriesFromDictionary: InfoPlist];
+	
+	if ([sender state] == NSOnState)
+	{
+				
+		NSArray *BDTValues = [NSArray arrayWithObjects: [NSArray arrayWithObject: @"rte"], @"RTE Mod Folder", @"Default", @"1", @"Viewer", @"RTEMOD", nil];
+		
+		NSArray *BDTKeys = [NSArray arrayWithObjects: @"CFBundleTypeExtensions", @"CFBundleTypeName",  @"LSHandlerRank", @"LSTypeIsPackage", @"CFBundleTypeRole", @"CFBundleTypeIconFile", nil];
+		
+		NSDictionary *BDTDict = [NSDictionary dictionaryWithObjects: BDTValues forKeys: BDTKeys];
+		
+		NSArray *BDTArray = [NSArray arrayWithObject: BDTDict];
+		
+		[MutablePlist setObject: BDTArray forKey: @"CFBundleDocumentTypes"];
+		
+	}
+	else if ([sender state] == NSOffState)
+	{
+		
+		[MutablePlist removeObjectForKey: @"CFBundleDocumentTypes"];
+		
+	}
+	
+	NSLog(@"%@", MutablePlist);
+	
+	[MutablePlist writeToFile: InfoPath atomically: YES];
+	
+	[MutablePlist release];
+
+}
+
 - (void)setRunButtonImage
 {
     
@@ -289,23 +360,29 @@ sortDescriptorsDidChange:(NSSortDescriptor *)OldDescriptors
     
 }
 
-- (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)op
+- (NSDragOperation)tableView: (NSTableView*)tv
+				validateDrop: (id <NSDraggingInfo>)info
+				 proposedRow: (int)row
+	   proposedDropOperation: (NSTableViewDropOperation)op
 {
+	
+	[TableView setDropRow: -1 dropOperation: NSTableViewDropOn];
     
     return NSDragOperationEvery;
     
 }
 
-- (BOOL)tableView:(NSTableView *)aTableView acceptDrop:(id <NSDraggingInfo>)info
-
-              row:(int)row dropOperation:(NSTableViewDropOperation)operation
+- (BOOL)tableView: (NSTableView *)aTableView
+	   acceptDrop: (id <NSDraggingInfo>)info
+			  row: (int)row
+	dropOperation: (NSTableViewDropOperation)operation
 {
     
 	NSAutoreleasePool *Pool = [[NSAutoreleasePool alloc] init];
 	
     NSPasteboard* PasteBoard = [info draggingPasteboard];
     
-    NSArray *Files = [PasteBoard propertyListForType:NSFilenamesPboardType];
+    NSArray *Files = [PasteBoard propertyListForType: NSFilenamesPboardType];
     
     CorDirectory *CorDir = [[[CorDirectory alloc] init] autorelease];
     
